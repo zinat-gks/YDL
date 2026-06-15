@@ -5,19 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Central Bank Tycoon</title>
 <style>
+  /* ============================================================
+     THEME / BASE
+     ============================================================ */
   :root {
-    --bg: #0c1018;
-    --panel: #151b27;
-    --panel-2: #1d2636;
-    --line: #2a3650;
-    --ink: #e7edf7;
-    --muted: #8b9bb4;
-    --accent: #4dd6a3;
-    --accent-2: #5b9bff;
-    --warn: #ffcf5c;
-    --bad: #ff6b6b;
-    --good: #4dd6a3;
-    --shadow: 0 8px 30px rgba(0,0,0,.45);
+    --bg: #0c1018; --panel: #151b27; --panel-2: #1d2636; --line: #2a3650;
+    --ink: #e7edf7; --muted: #8b9bb4; --accent: #4dd6a3; --accent-2: #5b9bff;
+    --warn: #ffcf5c; --bad: #ff6b6b; --good: #4dd6a3; --shadow: 0 8px 30px rgba(0,0,0,.45);
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; min-height: 100%; }
@@ -25,179 +19,166 @@
     background: radial-gradient(1200px 700px at 70% -10%, #14213a 0%, var(--bg) 55%);
     color: var(--ink);
     font-family: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    padding: 20px;
-    overflow-x: hidden;
+    display: flex; justify-content: center; padding: 18px; overflow-x: hidden;
   }
-  .app { width: 100%; max-width: 760px; }
+  .app { width: 100%; max-width: 1080px; }
   .screen { display: none; }
   .screen.active { display: block; animation: fade .35s ease; }
   @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
-  /* ---------- Home screen ---------- */
-  .hero {
-    position: relative; border-radius: 18px; overflow: hidden;
-    box-shadow: var(--shadow); margin-bottom: 22px;
-  }
-  .hero img { width: 100%; height: 230px; object-fit: cover; display: block; filter: saturate(1.1); }
-  .hero .veil {
-    position: absolute; inset: 0;
-    background: linear-gradient(180deg, rgba(12,16,24,.25) 0%, rgba(12,16,24,.92) 100%);
-    display: flex; flex-direction: column; justify-content: flex-end; padding: 22px;
-  }
-  .hero h1 { margin: 0; font-size: 32px; letter-spacing: .3px; }
-  .hero p { margin: 6px 0 0; color: var(--muted); font-size: 14px; max-width: 540px; }
-
-  .howto {
-    background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
-    padding: 16px 18px; margin-bottom: 22px; font-size: 13.5px; line-height: 1.7; color: var(--muted);
-  }
+  /* ============================================================
+     MENU
+     ============================================================ */
+  .hero { position: relative; border-radius: 18px; overflow: hidden; box-shadow: var(--shadow); margin-bottom: 20px; }
+  .hero img { width: 100%; height: 220px; object-fit: cover; display: block; }
+  .hero .veil { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(12,16,24,.25) 0%, rgba(12,16,24,.92) 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 22px; }
+  .hero h1 { margin: 0; font-size: 32px; }
+  .hero p { margin: 6px 0 0; color: var(--muted); font-size: 14px; max-width: 560px; }
+  .howto { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; margin-bottom: 20px; font-size: 13.5px; line-height: 1.7; color: var(--muted); }
   .howto b { color: var(--ink); }
-
   .pick-label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin: 0 0 12px; }
   .diffs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-  @media (max-width: 600px){ .diffs { grid-template-columns: 1fr; } }
-  .diff-card {
-    background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
-    overflow: hidden; cursor: pointer; text-align: left; color: var(--ink); padding: 0;
-    transition: transform .15s, border-color .15s; display: flex; flex-direction: column;
-  }
+  @media (max-width: 640px){ .diffs { grid-template-columns: 1fr; } }
+  .diff-card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; cursor: pointer; text-align: left; color: var(--ink); padding: 0; transition: transform .15s, border-color .15s; display: flex; flex-direction: column; }
   .diff-card:hover { transform: translateY(-4px); border-color: var(--accent-2); }
-  .diff-card img { width: 100%; height: 110px; object-fit: cover; display: block; }
+  .diff-card img { width: 100%; height: 104px; object-fit: cover; display: block; }
   .diff-card .body { padding: 13px 14px 16px; }
-  .diff-card .name { font-size: 17px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
-  .diff-card .name .pip { font-size: 12px; }
+  .diff-card .name { font-size: 17px; font-weight: 800; }
   .diff-card .blurb { font-size: 12px; color: var(--muted); margin-top: 5px; line-height: 1.5; }
-  .easy .name { color: var(--good); }
-  .normal .name { color: var(--accent-2); }
-  .hard .name { color: var(--bad); }
+  .easy .name { color: var(--good); } .normal .name { color: var(--accent-2); } .hard .name { color: var(--bad); }
 
-  /* ---------- Game screen ---------- */
-  header.top {
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 12px; margin-bottom: 18px; flex-wrap: wrap;
-  }
+  /* ============================================================
+     GAME HEADER / HUD
+     ============================================================ */
+  header.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
   .brand { display: flex; align-items: center; gap: 12px; }
-  .logo {
-    width: 42px; height: 42px; border-radius: 12px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    display: grid; place-items: center; font-size: 22px; box-shadow: var(--shadow);
-  }
-  .brand h2 { font-size: 18px; margin: 0; }
-  .brand small { color: var(--muted); font-size: 12px; }
+  .logo { width: 42px; height: 42px; border-radius: 12px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); display: grid; place-items: center; font-size: 22px; box-shadow: var(--shadow); }
+  .brand h2 { font-size: 18px; margin: 0; } .brand small { color: var(--muted); font-size: 12px; }
   .hud { display: flex; gap: 10px; }
-  .hud .box {
-    background: var(--panel); border: 1px solid var(--line);
-    border-radius: 12px; padding: 8px 16px; text-align: center; min-width: 84px;
-  }
-  .hud .box .big { font-size: 20px; font-weight: 800; }
-  .hud .box .lab { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+  .hud .box { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 8px 16px; text-align: center; min-width: 84px; }
+  .hud .box .big { font-size: 20px; font-weight: 800; } .hud .box .lab { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
   #scoreBox .big { color: var(--accent); }
 
-  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
-  .stat {
-    background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
-    padding: 16px; position: relative; box-shadow: var(--shadow); transition: background .6s;
-  }
-  .stat.flash-good { animation: flashGood .8s ease; }
-  .stat.flash-bad { animation: flashBad .8s ease; }
-  @keyframes flashGood { 0%{ background: rgba(77,214,163,.28);} 100%{ background: var(--panel);} }
-  @keyframes flashBad  { 0%{ background: rgba(255,107,107,.28);} 100%{ background: var(--panel);} }
-  .stat .label { font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; }
-  .stat .value { font-size: 34px; font-weight: 800; margin-top: 6px; }
-  .stat .target { font-size: 11px; color: var(--muted); margin-top: 4px; }
-  .chip { font-size: 10px; padding: 2px 8px; border-radius: 999px; font-weight: 800; }
+  .layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 16px; }
+  @media (max-width: 900px){ .layout { grid-template-columns: 1fr; } }
+  .col { display: flex; flex-direction: column; gap: 16px; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 16px; box-shadow: var(--shadow); }
+  .panel h3 { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin: 0 0 12px; }
+
+  /* ---------- stat dashboard ---------- */
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  @media (max-width: 520px){ .stats { grid-template-columns: repeat(2,1fr); } }
+  .stat { background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 11px; }
+  .stat .label { font-size: 11px; color: var(--muted); display: flex; justify-content: space-between; gap: 6px; }
+  .stat .value { font-size: 20px; font-weight: 800; margin-top: 3px; }
+  .stat .sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .stat .bar { height: 5px; border-radius: 4px; background: #0e1420; margin-top: 7px; overflow: hidden; }
+  .stat .bar > div { height: 100%; border-radius: 4px; transition: width .5s; }
+  .chip { font-size: 9.5px; padding: 1px 6px; border-radius: 999px; font-weight: 800; white-space: nowrap; }
   .chip.good { background: rgba(77,214,163,.15); color: var(--good); }
   .chip.warn { background: rgba(255,207,92,.15); color: var(--warn); }
   .chip.bad  { background: rgba(255,107,107,.15); color: var(--bad); }
 
-  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 18px; box-shadow: var(--shadow); }
-  .control .row { display: flex; justify-content: space-between; align-items: baseline; }
-  .control .name { font-size: 14px; font-weight: 600; }
-  .control .val { font-size: 22px; font-weight: 800; color: var(--accent); }
-  input[type=range]{ width: 100%; accent-color: var(--accent-2); margin: 12px 0 4px; height: 6px; }
-  .hint { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  /* ---------- 3D city ---------- */
+  #cityWrap { position: relative; }
+  #city { width: 100%; height: 320px; border-radius: 12px; overflow: hidden; background: #0a0e16; border: 1px solid var(--line); }
+  #city canvas { display: block; border-radius: 12px; }
+  #cityFallback { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; padding: 20px; color: var(--muted); font-size: 13px; }
+  #buildingInfo { margin-top: 10px; background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: 12.5px; color: var(--muted); min-height: 20px; }
+  #buildingInfo b { color: var(--ink); }
+  .city-hint { font-size: 11px; color: var(--muted); margin-top: 8px; }
 
-  .feedback {
-    min-height: 20px; margin: 14px 0; font-size: 13px; text-align: center;
-    color: var(--muted); transition: opacity .2s;
-  }
-  .feedback .stars { color: var(--warn); letter-spacing: 3px; font-size: 16px; }
+  /* ---------- controls ---------- */
+  .control .row { display: flex; justify-content: space-between; align-items: baseline; }
+  .control .name { font-size: 13px; font-weight: 600; }
+  .control .val { font-size: 20px; font-weight: 800; color: var(--accent); }
+  input[type=range]{ width: 100%; accent-color: var(--accent-2); margin: 10px 0 4px; height: 6px; }
+  .hint { font-size: 11.5px; color: var(--muted); line-height: 1.5; }
+  .btn { padding: 14px; border: none; border-radius: 12px; cursor: pointer; font-size: 15px; font-weight: 800; transition: .15s; color: #08111f; background: linear-gradient(135deg, var(--accent), var(--accent-2)); width: 100%; }
+  .btn:hover { filter: brightness(1.08); transform: translateY(-1px); } .btn:active { transform: translateY(1px); }
+  .btn.alt { background: var(--panel-2); color: var(--ink); border: 1px solid var(--line); }
+  .btn.small { padding: 10px; font-size: 13px; }
+  .btnrow { display: flex; gap: 10px; margin-top: 10px; }
+  .feedback { font-size: 13px; color: var(--muted); line-height: 1.55; min-height: 18px; }
+  .feedback .stars { color: var(--warn); letter-spacing: 3px; }
   .feedback b.pts { color: var(--accent); }
 
-  .actions { display: flex; gap: 10px; margin-top: 6px; }
-  .btn {
-    flex: 1; padding: 15px; border: none; border-radius: 12px; cursor: pointer;
-    font-size: 15px; font-weight: 800; transition: .15s; color: #08111f;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  }
-  .btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
-  .btn:active { transform: translateY(1px); }
-  .btn.ghost { background: var(--panel-2); color: var(--ink); border: 1px solid var(--line); flex: 0 0 auto; padding: 15px 18px; }
-
-  footer { margin-top: 16px; text-align: center; color: var(--muted); font-size: 11px; }
-
-  /* ---------- Game over ---------- */
-  .overlay {
-    position: fixed; inset: 0; background: rgba(5,8,14,.85);
-    display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 50;
-    backdrop-filter: blur(2px);
-  }
+  /* ============================================================
+     MODALS (event, room, ending)
+     ============================================================ */
+  .overlay { position: fixed; inset: 0; background: rgba(5,8,14,.85); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 80; backdrop-filter: blur(2px); }
   .overlay.hidden { display: none; }
-  .modal {
-    background: var(--panel); border: 1px solid var(--line); border-radius: 18px;
-    padding: 28px; max-width: 460px; width: 100%; box-shadow: var(--shadow); text-align: center;
-    animation: fade .3s ease;
-  }
-  .modal h2 { margin: 0 0 4px; font-size: 24px; }
-  .modal .grade { font-size: 64px; font-weight: 800; margin: 6px 0; }
-  .modal .final { font-size: 30px; font-weight: 800; color: var(--accent); }
+  .modal { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 24px; max-width: 520px; width: 100%; box-shadow: var(--shadow); animation: fade .3s ease; }
+  .modal h2 { margin: 0 0 6px; font-size: 22px; }
   .modal p { color: var(--muted); line-height: 1.6; font-size: 14px; }
+  .tag { display: inline-block; background: rgba(255,107,107,.15); color: var(--bad); font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 999px; text-transform: uppercase; letter-spacing: .5px; }
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+  .choice { text-align: left; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel-2); color: var(--ink); cursor: pointer; transition: .15s; }
+  .choice:hover { border-color: var(--accent-2); transform: translateX(3px); }
+  .choice b { font-size: 14px; } .choice small { display: block; color: var(--muted); font-size: 11.5px; margin-top: 3px; }
+  .modal-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+  .modal-stats .ms { background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; font-size: 12px; }
+  .modal-stats .ms b { float: right; }
+
+  .score-big { font-size: 30px; font-weight: 800; color: var(--accent); margin: 4px 0; }
+  .bars { margin-top: 12px; } .bar-wrap { margin-bottom: 8px; }
+  .bar-wrap .lab { font-size: 11px; color: var(--muted); display: flex; justify-content: space-between; margin-bottom: 3px; }
+  .bar2 { height: 8px; border-radius: 6px; background: var(--panel-2); overflow: hidden; } .bar2 > div { height: 100%; border-radius: 6px; }
+
+  /* ============================================================
+     OFFICE MODE
+     ============================================================ */
+  #officeOverlay { z-index: 70; flex-direction: column; gap: 12px; }
+  #officeOverlay .obar { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 680px; }
+  #officeOverlay h2 { margin: 0; font-size: 18px; }
+  #officeCanvas { background: #0a0e16; border: 1px solid var(--line); border-radius: 14px; width: 100%; max-width: 680px; height: auto; box-shadow: var(--shadow); touch-action: none; }
+  #officeHint { color: var(--muted); font-size: 12.5px; text-align: center; max-width: 680px; }
+  #officeHint b { color: var(--ink); }
+
+  /* ============================================================
+     ACHIEVEMENT TOASTS
+     ============================================================ */
+  #toastWrap { position: fixed; right: 18px; bottom: 18px; z-index: 90; display: flex; flex-direction: column; gap: 8px; }
+  .toast { background: linear-gradient(135deg,#2a2030,#1d2636); border: 1px solid var(--warn); border-radius: 12px; padding: 10px 14px; box-shadow: var(--shadow); max-width: 280px; animation: toastIn .4s ease, toastOut .4s ease 4.1s forwards; }
+  .toast .th { font-size: 11px; color: var(--warn); font-weight: 800; text-transform: uppercase; letter-spacing: .5px; }
+  .toast .tt { font-size: 13px; margin-top: 2px; }
+  @keyframes toastIn { from{opacity:0; transform: translateX(40px);} to{opacity:1; transform:none;} }
+  @keyframes toastOut { to{opacity:0; transform: translateX(40px);} }
+
+  footer { margin-top: 14px; text-align: center; color: var(--muted); font-size: 11px; }
 </style>
 </head>
 <body>
 <div class="app">
 
-  <!-- ============ HOME ============ -->
-  <section class="screen active" id="home">
+  <!-- ============ MENU ============ -->
+  <section class="screen active" id="menu">
     <div class="hero">
-      <img src="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=1200&q=80" alt="Stacks of banknotes" />
+      <img src="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=1200&q=80" alt="Banknotes" />
       <div class="veil">
         <h1>🏦 Central Bank Tycoon</h1>
-        <p>You run the nation's central bank. Set the interest rate each quarter to keep inflation near 2% and unemployment low. Simple to learn — tricky to master.</p>
+        <p>Run the nation's central bank. Set the interest rate, survive economic shocks, watch your decisions ripple through a living 3D city, and keep inflation near 2% with jobs intact.</p>
       </div>
     </div>
-
     <div class="howto">
-      <b>How to play:</b> Each quarter you set one number — the <b>interest rate</b>.
-      Raise it to cool <b>inflation</b> (but jobs suffer). Lower it to fight <b>unemployment</b> (but prices heat up).
-      The closer you keep inflation to the <b>2% target</b> and unemployment low, the more points you score.
-      Random shocks will test you. Survive your full term!
+      <b>How to play:</b> Each quarter you set the <b>interest rate</b> and face a random <b>economic event</b> with real trade-offs.
+      Raise rates to cool <b>inflation</b> (jobs suffer); cut them to fight <b>unemployment</b> (prices heat up).
+      Your choices move seven stats — inflation, unemployment, GDP, credibility, public trust, market confidence and financial stability —
+      and the <b>3D city</b> reacts in real time. Explore your <b>office</b>, unlock <b>achievements</b>, and earn one of several endings.
     </div>
-
     <p class="pick-label">Choose a difficulty</p>
     <div class="diffs">
       <button class="diff-card easy" data-diff="easy">
-        <img src="https://images.unsplash.com/photo-1565514020179-026b92b84bb6?w=600&q=70" alt="A roll of cash" />
-        <div class="body">
-          <div class="name"><span class="pip">●</span> Easy</div>
-          <div class="blurb">A calm economy with gentle shocks and a forgiving target. 12 quarters. Perfect for learning.</div>
-        </div>
+        <img src="https://images.unsplash.com/photo-1565514020179-026b92b84bb6?w=600&q=70" alt="Cash" />
+        <div class="body"><div class="name">● Easy</div><div class="blurb">Calm economy, gentle shocks, forgiving targets. 12 quarters. Learn the ropes.</div></div>
       </button>
       <button class="diff-card normal" data-diff="normal">
-        <img src="https://images.unsplash.com/photo-1601597111158-2fceff292cdc?w=600&q=70" alt="A bank ATM keypad" />
-        <div class="body">
-          <div class="name"><span class="pip">●●</span> Normal</div>
-          <div class="blurb">A balanced economy with real volatility. 16 quarters. The standard challenge.</div>
-        </div>
+        <img src="https://images.unsplash.com/photo-1601597111158-2fceff292cdc?w=600&q=70" alt="ATM" />
+        <div class="body"><div class="name">●● Normal</div><div class="blurb">Real volatility and tougher events. 16 quarters. The standard challenge.</div></div>
       </button>
       <button class="diff-card hard" data-diff="hard">
-        <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&q=70" alt="A falling market chart" />
-        <div class="body">
-          <div class="name"><span class="pip">●●●</span> Hard</div>
-          <div class="blurb">A turbulent economy with violent shocks and a strict target. 20 quarters. For veterans.</div>
-        </div>
+        <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&q=70" alt="Market crash" />
+        <div class="body"><div class="name">●●● Hard</div><div class="blurb">Violent shocks, strict targets, fragile markets. 20 quarters. For veterans.</div></div>
       </button>
     </div>
   </section>
@@ -207,10 +188,7 @@
     <header class="top">
       <div class="brand">
         <div class="logo">🏦</div>
-        <div>
-          <h2>Central Bank Tycoon</h2>
-          <small id="diffLabel">—</small>
-        </div>
+        <div><h2>Central Bank Tycoon</h2><small id="diffLabel">—</small></div>
       </div>
       <div class="hud">
         <div class="box" id="scoreBox"><div class="big" id="scoreVal">0</div><div class="lab">Score</div></div>
@@ -218,267 +196,738 @@
       </div>
     </header>
 
-    <div class="stats">
-      <div class="stat" id="stat-infl">
-        <div class="label"><span>Inflation</span><span class="chip" id="chip-infl"></span></div>
-        <div class="value" id="val-infl">—</div>
-        <div class="target">Target: 2.0%</div>
-      </div>
-      <div class="stat" id="stat-unemp">
-        <div class="label"><span>Unemployment</span><span class="chip" id="chip-unemp"></span></div>
-        <div class="value" id="val-unemp">—</div>
-        <div class="target">Healthy: under ~5%</div>
-      </div>
-    </div>
-
-    <div class="panel">
-      <div class="control">
-        <div class="row">
-          <span class="name">Policy Interest Rate</span>
-          <span class="val"><span id="rateVal">3.0</span>%</span>
+    <div class="layout">
+      <div class="col">
+        <div class="panel">
+          <h3>Economic Dashboard</h3>
+          <div class="stats" id="stats"></div>
         </div>
-        <input type="range" id="rate" min="0" max="12" step="0.25" value="3" />
-        <div class="hint">Neutral is around <b>3%</b>. Above neutral cools the economy (inflation ↓, unemployment ↑). Below neutral heats it up (inflation ↑, unemployment ↓).</div>
+        <div class="panel">
+          <h3>The Economy — Live 3D City</h3>
+          <div id="cityWrap">
+            <div id="city"><div id="cityFallback">🏙️ The 3D city couldn't load (Three.js may be blocked or offline).<br>No problem — the rest of the game works fine.</div></div>
+          </div>
+          <div id="buildingInfo">Click a building to inspect it.</div>
+          <div class="city-hint">Shops glow red with inflation · Factories dim with unemployment · Banks shake when unstable · the Central Bank glows green when credible.</div>
+        </div>
       </div>
 
-      <div class="feedback" id="feedback">Set your rate, then advance the quarter.</div>
-
-      <div class="actions">
-        <button class="btn" id="advanceBtn">Advance Quarter ▸</button>
-        <button class="btn ghost" id="homeBtn" title="Quit to menu">⌂</button>
+      <div class="col">
+        <div class="panel">
+          <h3>Monetary Policy</h3>
+          <div class="control">
+            <div class="row"><span class="name">Policy Interest Rate</span><span class="val"><span class="rateDisplay">3.00</span>%</span></div>
+            <input type="range" class="rateInput" min="0" max="12" step="0.25" value="3" oninput="setRate(this.value)" />
+            <div class="hint">Neutral ≈ <b>3%</b>. Above neutral cools the economy; below neutral heats it. Big jumps rattle markets.</div>
+          </div>
+          <div class="btnrow"><button class="btn" id="advanceBtn">Advance Quarter ▸</button></div>
+          <div class="btnrow">
+            <button class="btn alt small" id="officeBtn">🏛️ Walk the Office</button>
+            <button class="btn alt small" id="quitBtn">⌂ Menu</button>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Briefing</h3>
+          <div class="feedback" id="feedback">Set your rate, then advance the quarter.</div>
+        </div>
       </div>
     </div>
-
-    <footer>Set the rate · press <b>Enter</b> to advance · keep inflation near 2%</footer>
+    <footer>Set the rate · face the event · watch the city react · press <b>Enter</b> to advance</footer>
   </section>
 </div>
 
-<!-- ============ GAME OVER ============ -->
-<div class="overlay hidden" id="overOverlay">
+<!-- ============ EVENT MODAL ============ -->
+<div class="overlay hidden" id="eventOverlay">
   <div class="modal">
-    <h2 id="overTitle">Term complete</h2>
-    <div class="grade" id="overGrade">A</div>
-    <div class="final" id="overScore">0 pts</div>
-    <p id="overVerdict"></p>
-    <div class="actions" style="margin-top:18px;">
-      <button class="btn" id="playAgainBtn">Play Again</button>
-    </div>
+    <span class="tag" id="evTag">⚠ Event</span>
+    <h2 id="evTitle" style="margin-top:10px;"></h2>
+    <p id="evText"></p>
+    <div class="choices" id="evChoices"></div>
   </div>
 </div>
+
+<!-- ============ ROOM MODAL (office actions) ============ -->
+<div class="overlay hidden" id="roomOverlay">
+  <div class="modal">
+    <h2 id="roomTitle"></h2>
+    <div id="roomBody"></div>
+    <div class="btnrow"><button class="btn alt" onclick="hide('roomOverlay')">Close</button></div>
+  </div>
+</div>
+
+<!-- ============ OFFICE OVERLAY ============ -->
+<div class="overlay hidden" id="officeOverlay">
+  <div class="obar"><h2>🏛️ Central Bank Office</h2><button class="btn alt small" style="width:auto" id="officeExit">Back to Dashboard</button></div>
+  <canvas id="officeCanvas" width="680" height="440"></canvas>
+  <div id="officeHint">Move with <b>WASD</b> or <b>arrow keys</b>. Walk into a room and press <b>E</b> to act.</div>
+</div>
+
+<!-- ============ ENDING MODAL ============ -->
+<div class="overlay hidden" id="endOverlay">
+  <div class="modal" style="text-align:center;">
+    <h2 id="endTitle">Your term has ended</h2>
+    <div class="score-big" id="endScore">0 pts</div>
+    <p id="endVerdict"></p>
+    <div class="bars" id="endBars"></div>
+    <p id="endExtra" style="font-size:12px;"></p>
+    <div class="btnrow"><button class="btn" id="playAgainBtn">Play Again</button></div>
+  </div>
+</div>
+
+<div id="toastWrap"></div>
+
+<!-- Three.js from CDN (classic global build, beginner-friendly). onerror sets a flag for the fallback. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" onerror="window.__noThree=true"></script>
 
 <script>
 "use strict";
 
 /* ============================================================
-   Central Bank Tycoon — simplified
-   One control (the interest rate), two stats (inflation,
-   unemployment). Keep inflation near 2% and unemployment low.
+   CENTRAL BANK TYCOON
+   Sections: 1) constants & state  2) economic events
+   3) simulation  4) scoring  5) achievements/endings
+   6) dashboard render  7) 3D city  8) office mode  9) wiring
    ============================================================ */
 
+/* ---------- 1. CONSTANTS & STATE ---------- */
 const TARGET = 2.0;        // inflation target
-const NATURAL_U = 4.5;     // natural unemployment rate
-const NEUTRAL_RATE = 3.0;  // rate that leaves the economy stable
+const NATURAL_U = 4.5;     // natural unemployment
+const NEUTRAL_RATE = 3.0;  // stable interest rate
 
 const DIFF = {
-  easy:   { label: "Easy",   rounds: 12, shock: 0.4, evScale: 0.6, tol: 1.4, startInfl: 3.0, startUnemp: 5.0 },
-  normal: { label: "Normal", rounds: 16, shock: 0.9, evScale: 1.0, tol: 1.0, startInfl: 4.0, startUnemp: 5.5 },
-  hard:   { label: "Hard",   rounds: 20, shock: 1.6, evScale: 1.6, tol: 0.7, startInfl: 6.0, startUnemp: 6.5 },
+  easy:   { label: "Easy",   rounds: 12, shock: 0.4, evScale: 0.7, tol: 1.4,
+            start: { inflation: 3.0, unemployment: 5.0, gdp: 2.0, credibility: 65, publicTrust: 62, marketConfidence: 62, financialStability: 66 } },
+  normal: { label: "Normal", rounds: 16, shock: 0.9, evScale: 1.0, tol: 1.0,
+            start: { inflation: 4.0, unemployment: 5.5, gdp: 1.8, credibility: 58, publicTrust: 58, marketConfidence: 56, financialStability: 60 } },
+  hard:   { label: "Hard",   rounds: 20, shock: 1.6, evScale: 1.4, tol: 0.7,
+            start: { inflation: 6.0, unemployment: 6.5, gdp: 1.4, credibility: 50, publicTrust: 52, marketConfidence: 50, financialStability: 52 } },
 };
 
-/* Flavour shocks — a one-time nudge plus a headline. No decisions. */
-const EVENTS = [
-  { msg: "🛢️ Oil prices spike — costs surge.",        infl: +1.6, unemp:  0   },
-  { msg: "💻 A tech boom lifts output and hiring.",     infl: -0.4, unemp: -1.1 },
-  { msg: "🌍 A global recession hits exports.",         infl: -0.6, unemp: +1.5 },
-  { msg: "🛒 Consumer spending surges.",                infl: +1.1, unemp: -0.6 },
-  { msg: "🚢 Supply chains snarl up.",                  infl: +1.2, unemp: +0.3 },
-  { msg: "🏭 A productivity leap cools prices.",        infl: -0.9, unemp: -0.4 },
-];
+let G = null; // game state
 
-let G = null;
-
-function startGame(diff) {
-  const cfg = DIFF[diff];
-  G = {
-    diff, cfg,
-    round: 0,
-    inflation: cfg.startInfl,
-    unemployment: cfg.startUnemp,
-    rate: NEUTRAL_RATE,
-    score: 0,
+function newGame(diff) {
+  const cfg = DIFF[diff], s = cfg.start;
+  return {
+    diff, cfg, round: 0, rate: NEUTRAL_RATE, prevRate: NEUTRAL_RATE, score: 0,
+    inflation: s.inflation, unemployment: s.unemployment, gdp: s.gdp,
+    credibility: s.credibility, publicTrust: s.publicTrust,
+    marketConfidence: s.marketConfidence, financialStability: s.financialStability,
+    pendingEvent: null, lastEventOutcome: "", pressUsed: false,
+    achievements: {}, eventsResolved: 0, peakInflation: s.inflation, peakUnemployment: s.unemployment,
     alive: true,
   };
-  document.getElementById("diffLabel").textContent = cfg.label + " · " + cfg.rounds + " quarters";
-  document.getElementById("termVal").textContent = "0 / " + cfg.rounds;
-  document.getElementById("rate").value = NEUTRAL_RATE;
-  document.getElementById("rateVal").textContent = NEUTRAL_RATE.toFixed(2);
-  document.getElementById("feedback").innerHTML = "Set your rate, then advance the quarter.";
-  showScreen("game");
-  render();
 }
 
-/* ---- one quarter ---- */
-function advance() {
-  if (!G || !G.alive) return;
-  const g = G, cfg = g.cfg;
-  g.rate = parseFloat(document.getElementById("rate").value);
-  const gap = g.rate - NEUTRAL_RATE;
+/* ---------- 2. ECONOMIC EVENTS ----------
+   Each choice has `d` (stat deltas) and/or `fn(g)` for conditional effects.
+   Economic deltas (inflation/unemployment/gdp) are scaled by difficulty. */
+const ECON_KEYS = ["inflation", "unemployment", "gdp"]; // scaled by evScale
+const EVENTS = [
+  { title: "Oil Price Shock", icon: "🛢️", text: "Crude prices spike 40% overnight, threatening to push costs up across the whole economy. How do you respond?",
+    choices: [
+      { b: "Raise rates aggressively", s: "Crush inflation early — jobs will hurt.", d: { inflation: -1.0, unemployment: +0.8, gdp: -0.4, credibility: +4, marketConfidence: -3 } },
+      { b: "Communicate patience", s: "Bet it's temporary. Credibility depends on how hot inflation already is.",
+        fn: g => { g.publicTrust += 5; if (g.inflation > 4) { g.credibility -= 4; return "The public appreciated the calm, but with inflation already high your patience dented credibility."; } g.credibility += 3; return "Markets believed you — patience paid off this time."; } },
+      { b: "Emergency liquidity support", s: "Cushion the economy, at the cost of more inflation.", d: { financialStability: +6, inflation: +0.6, marketConfidence: +3 } },
+      { b: "Do nothing", s: "Hope it passes on its own.", d: { inflation: +1.0, credibility: -5, publicTrust: -3 } },
+    ] },
+  { title: "Housing Bubble", icon: "🏠", text: "Home prices are soaring and mortgage debt is ballooning. A crash could threaten the banks.",
+    choices: [
+      { b: "Hike rates to cool it", s: "Slow the frenzy directly.", d: { inflation: -0.5, unemployment: +0.6, gdp: -0.4, financialStability: +5, marketConfidence: -2 } },
+      { b: "Tighten lending rules", s: "Targeted macroprudential brakes.", d: { financialStability: +7, gdp: -0.2, credibility: +3 } },
+      { b: "Let it run", s: "Don't spoil the boom — risk a bigger bust.", d: { gdp: +0.6, financialStability: -8, marketConfidence: +3 } },
+    ] },
+  { title: "Banking Panic", icon: "🏦", text: "Depositors are queueing to pull cash from a major lender. Interbank markets are freezing.",
+    choices: [
+      { b: "Liquidity + guarantee deposits", s: "Save the system; risk reigniting inflation.", d: { financialStability: +10, publicTrust: +4, inflation: +0.4, credibility: +2 } },
+      { b: "Let the bank fail", s: "Punish recklessness — contagion may spread.", d: { financialStability: -10, marketConfidence: -8, unemployment: +0.8, credibility: +5 } },
+      { b: "Arrange a private takeover", s: "A surgical, quiet fix.", d: { financialStability: +5, marketConfidence: +2, publicTrust: +1 } },
+    ] },
+  { title: "Currency Fall", icon: "💱", text: "The currency is sliding fast on foreign exchange markets, raising the price of imports.",
+    choices: [
+      { b: "Hike rates to defend it", s: "Attract capital back, hurt growth.", d: { inflation: -0.6, unemployment: +0.7, gdp: -0.5, credibility: +3, marketConfidence: +2 } },
+      { b: "Intervene with reserves", s: "Spend reserves to prop it up.", d: { financialStability: -3, marketConfidence: +4, inflation: +0.2 } },
+      { b: "Let it float", s: "Accept a weaker currency.", d: { inflation: +0.9, gdp: +0.3, publicTrust: -3 } },
+    ] },
+  { title: "Consumer Spending Boom", icon: "🛒", text: "Households are spending freely and demand is red-hot. The economy may be overheating.",
+    choices: [
+      { b: "Raise rates pre-emptively", s: "Tap the brakes before prices surge.", d: { inflation: -0.6, unemployment: +0.5, gdp: -0.3, credibility: +4 } },
+      { b: "Hold and enjoy the growth", s: "Let the good times roll.", d: { gdp: +0.8, inflation: +0.8, unemployment: -0.4, marketConfidence: +3 } },
+      { b: "Hawkish guidance only", s: "Talk tough without moving rates.", d: { inflation: -0.2, credibility: +1, publicTrust: -1 } },
+    ] },
+  { title: "Recession Warning", icon: "📉", text: "Leading indicators are flashing red. Growth is stalling and layoffs are starting.",
+    choices: [
+      { b: "Cut rates pre-emptively", s: "Stimulate before the downturn bites.", d: { gdp: +0.8, unemployment: -0.6, inflation: +0.5, marketConfidence: +4 } },
+      { b: "Hold and watch the data", s: "Avoid over-reacting to noise.", d: { credibility: +2, gdp: -0.3, unemployment: +0.4 } },
+      { b: "Launch a stimulus program", s: "Big bazooka — asset purchases.", d: { gdp: +1.0, inflation: +0.7, financialStability: -3, marketConfidence: +5 } },
+    ] },
+  { title: "Supply Chain Disruption", icon: "🚢", text: "Global shipping is snarled. Goods are scarce and costs are climbing through the economy.",
+    choices: [
+      { b: "Look through it, hold rates", s: "Assume it eases on its own.", d: { inflation: +0.8, credibility: -2, publicTrust: -2 } },
+      { b: "Modest hike to anchor expectations", s: "A measured signal.", d: { inflation: -0.3, unemployment: +0.4, credibility: +3 } },
+      { b: "Targeted support for firms", s: "Help the worst-hit businesses.", d: { gdp: +0.3, financialStability: +2, inflation: +0.3 } },
+    ] },
+  { title: "Stock Market Crash", icon: "📛", text: "Equity markets are in freefall and panic is spreading to the wider economy.",
+    choices: [
+      { b: "Slash rates & reassure markets", s: "Backstop confidence fast.", d: { marketConfidence: +8, gdp: +0.5, inflation: +0.6, financialStability: +3, credibility: -2 } },
+      { b: "Hold firm, avoid moral hazard", s: "Don't reward speculation.", d: { credibility: +5, marketConfidence: -5, financialStability: -3 } },
+      { b: "Coordinated liquidity backstop", s: "Work with other central banks.", d: { financialStability: +7, marketConfidence: +5, inflation: +0.3 } },
+    ] },
+];
 
-  // base response to the rate
-  g.inflation     += -gap * 0.30 + rand(cfg.shock);
-  g.unemployment  +=  gap * 0.20 + rand(cfg.shock * 0.6);
-  // unemployment drifts back toward its natural level
-  g.unemployment  += (NATURAL_U - g.unemployment) * 0.10;
-
-  // occasional headline shock
-  let headline = "";
-  if (Math.random() < 0.3) {
-    const ev = EVENTS[Math.floor(Math.random() * EVENTS.length)];
-    g.inflation    += ev.infl * cfg.evScale;
-    g.unemployment += ev.unemp * cfg.evScale;
-    headline = ev.msg;
+/* apply a deltas object, scaling economic stats by difficulty */
+function applyDeltas(g, d) {
+  for (const k in d) {
+    let v = d[k];
+    if (ECON_KEYS.indexOf(k) >= 0) v *= g.cfg.evScale;
+    g[k] += v;
   }
-
-  g.inflation    = clamp(g.inflation, -3, 25);
-  g.unemployment = clamp(g.unemployment, 1.5, 25);
-  g.round++;
-
-  // score this quarter
-  const inflScore  = clamp(100 - Math.abs(g.inflation - TARGET) / cfg.tol * 38, 0, 100);
-  const excessU    = Math.max(0, g.unemployment - NATURAL_U);
-  const unempScore = clamp(100 - excessU * 18, 0, 100);
-  const avg        = (inflScore + unempScore) / 2;
-  const pts        = Math.round(avg);
-  g.score += pts;
-
-  const stars = avg >= 85 ? 3 : avg >= 60 ? 2 : avg >= 35 ? 1 : 0;
-  render(true);
-  showFeedback(stars, pts, headline);
-
-  // end conditions
-  if (g.inflation >= 20)        return endGame("hyperinflation");
-  if (g.unemployment >= 18)     return endGame("depression");
-  if (g.round >= cfg.rounds)    return endGame("complete");
 }
 
-/* ---- rendering ---- */
-function render(flash) {
+/* ---------- 3. SIMULATION ---------- */
+function rand(mag) { return (Math.random() * 2 - 1) * mag; }
+function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+function clampStats(g) {
+  g.inflation = clamp(g.inflation, -3, 30);
+  g.unemployment = clamp(g.unemployment, 1.5, 30);
+  g.gdp = clamp(g.gdp, -8, 10);
+  g.credibility = clamp(g.credibility, 0, 100);
+  g.publicTrust = clamp(g.publicTrust, 0, 100);
+  g.marketConfidence = clamp(g.marketConfidence, 0, 100);
+  g.financialStability = clamp(g.financialStability, 0, 100);
+}
+
+function simulateStep() {
+  const g = G, cfg = g.cfg;
+  const gap = g.rate - NEUTRAL_RATE;
+  const rateMove = Math.abs(g.rate - g.prevRate);
+
+  // core economy
+  g.inflation += -gap * 0.30 + rand(cfg.shock);
+  g.unemployment += gap * 0.20 + rand(cfg.shock * 0.6);
+  g.unemployment += (NATURAL_U - g.unemployment) * 0.10;
+  g.gdp = 2.2 - gap * 0.5 + rand(cfg.shock) - Math.max(0, g.inflation - 4) * 0.10;
+
+  // confidence / trust stats drift from outcomes
+  const inflMiss = Math.abs(g.inflation - TARGET);
+  g.credibility += (1.4 - inflMiss) - rateMove * 0.8;
+  g.publicTrust += (6 - (g.inflation + Math.max(0, g.unemployment - NATURAL_U) * 1.2)) * 0.5;
+  g.marketConfidence += (g.gdp - 1.2) * 1.6 - rateMove * 2.2;
+  g.financialStability += (4 - Math.max(0, g.rate - 6) * 1.2) * 0.5 - inflMiss * 0.3;
+
+  clampStats(g);
+  g.peakInflation = Math.max(g.peakInflation, g.inflation);
+  g.peakUnemployment = Math.max(g.peakUnemployment, g.unemployment);
+}
+
+/* ---------- 4. SCORING ---------- */
+function scoreQuarter() {
+  const g = G, cfg = g.cfg;
+  const inflScore = clamp(100 - Math.abs(g.inflation - TARGET) / cfg.tol * 38, 0, 100);
+  const unempScore = clamp(100 - Math.max(0, g.unemployment - NATURAL_U) * 18, 0, 100);
+  const confScore = (g.credibility + g.publicTrust + g.marketConfidence + g.financialStability) / 4;
+  const avg = inflScore * 0.45 + unempScore * 0.35 + confScore * 0.20;
+  const pts = Math.round(avg);
+  g.score += pts;
+  const stars = avg >= 85 ? 3 : avg >= 60 ? 2 : avg >= 35 ? 1 : 0;
+  return { pts, stars, avg };
+}
+
+/* ---------- 5. ACHIEVEMENTS & ENDINGS ---------- */
+const ACHIEVEMENTS = [
+  { id: "firstHike", th: "First Rate Hike", tt: "You raised the policy rate for the first time.",
+    test: g => g.rate > g.prevRate },
+  { id: "hawk", th: "Inflation Hawk", tt: "Tamed runaway inflation back near target.",
+    test: g => g.peakInflation >= 5 && g.inflation <= 2.5 },
+  { id: "soft", th: "Soft Landing", tt: "Inflation near 2% and unemployment low — together.",
+    test: g => Math.abs(g.inflation - 2) < 1 && g.unemployment <= 5 },
+  { id: "crisis", th: "Crisis Manager", tt: "Steered through three economic events.",
+    test: g => g.eventsResolved >= 3 },
+  { id: "perfect", th: "Perfect Quarter", tt: "Every key gauge in the green at once.",
+    test: g => Math.abs(g.inflation - 2) < 0.5 && g.unemployment <= 5 && g.credibility >= 70 && g.marketConfidence >= 70 },
+  { id: "recession", th: "Recession Fighter", tt: "Pulled unemployment back down from a deep slump.",
+    test: g => g.peakUnemployment >= 8 && g.unemployment <= 6 },
+  { id: "trusted", th: "Trusted Governor", tt: "Public trust climbed above 80.",
+    test: g => g.publicTrust >= 80 },
+  { id: "stabilizer", th: "Market Stabilizer", tt: "Market confidence climbed above 80.",
+    test: g => g.marketConfidence >= 80 },
+];
+function checkAchievements() {
+  ACHIEVEMENTS.forEach(a => {
+    if (!G.achievements[a.id] && a.test(G)) { G.achievements[a.id] = true; toast(a.th, a.tt); }
+  });
+}
+
+function decideEnding() {
+  const g = G;
+  if (g.inflation >= 8) return { title: "💥 Inflation Disaster", color: "var(--bad)",
+    verdict: "Prices spiralled out of control. Savings evaporated and the public lost faith in the currency. A cautionary tale for the textbooks." };
+  if (g.marketConfidence < 30 || g.financialStability < 30) return { title: "🌪️ Market Panic", color: "var(--bad)",
+    verdict: "Confidence collapsed and the financial system seized up. Whatever the inflation numbers said, the markets had already stopped believing." };
+  if (Math.abs(g.inflation - 2) < 2 && g.unemployment >= 8) return { title: "🧊 Recession Governor", color: "var(--warn)",
+    verdict: "You conquered inflation — but at the cost of mass unemployment. Stable prices are cold comfort in a jobless economy." };
+  if (Math.abs(g.inflation - 2) < 1 && g.unemployment <= 5.5 && g.credibility >= 70) return { title: "🎯 Soft Landing Master", color: "var(--good)",
+    verdict: "Inflation anchored, jobs protected, credibility untouchable. A textbook soft landing — your name goes down in monetary history." };
+  return { title: "⚖️ Balanced Technocrat", color: "var(--accent-2)",
+    verdict: "Not perfect, but steady. You kept the ship afloat through the storms and leave the economy in reasonable shape." };
+}
+
+/* ---------- 6. DASHBOARD RENDER ---------- */
+function inflStatus(v){ const d=Math.abs(v-TARGET); if(d<=1)return{cls:"good",t:"on target"}; if(d<=2.5)return{cls:"warn",t:v>TARGET?"hot":"cold"}; return{cls:"bad",t:v>TARGET?"out of control":"deflation"}; }
+function unempStatus(v){ if(v<=5.5)return{cls:"good",t:"healthy"}; if(v<=8)return{cls:"warn",t:"elevated"}; return{cls:"bad",t:"recession"}; }
+function gdpStatus(v){ if(v>=1.5)return{cls:"good",t:"growing"}; if(v>=0)return{cls:"warn",t:"sluggish"}; return{cls:"bad",t:"shrinking"}; }
+function barStatus(v,good,bad){ if(v>=good)return{cls:"good",t:"strong"}; if(v>=bad)return{cls:"warn",t:"shaky"}; return{cls:"bad",t:"critical"}; }
+const barColor = { good:"var(--good)", warn:"var(--warn)", bad:"var(--bad)" };
+
+const STAT_DEFS = [
+  { key:"inflation", label:"Inflation", sub:"Target 2.0%", fmt:v=>v.toFixed(1)+"%", status:inflStatus },
+  { key:"unemployment", label:"Unemployment", sub:"Healthy <5%", fmt:v=>v.toFixed(1)+"%", status:unempStatus },
+  { key:"gdp", label:"GDP Growth", sub:"Potential ~2%", fmt:v=>v.toFixed(1)+"%", status:gdpStatus },
+  { key:"credibility", label:"Credibility", sub:"Anchors expectations", pct:true, status:v=>barStatus(v,60,40) },
+  { key:"publicTrust", label:"Public Trust", sub:"Citizens' confidence", pct:true, status:v=>barStatus(v,60,40) },
+  { key:"marketConfidence", label:"Market Confidence", sub:"Investor sentiment", pct:true, status:v=>barStatus(v,55,35) },
+  { key:"financialStability", label:"Financial Stability", sub:"Banking system health", pct:true, status:v=>barStatus(v,55,35) },
+];
+
+function render() {
   const g = G;
   document.getElementById("scoreVal").textContent = g.score.toLocaleString();
   document.getElementById("roundVal").textContent = "Q" + (g.round + (g.round < g.cfg.rounds ? 1 : 0));
   document.getElementById("termVal").textContent = g.round + " / " + g.cfg.rounds;
 
-  setStat("infl", g.inflation, inflStatus(g.inflation));
-  setStat("unemp", g.unemployment, unempStatus(g.unemployment));
-
-  if (flash) {
-    flashStat("infl", Math.abs(g.inflation - TARGET) <= 1.5);
-    flashStat("unemp", g.unemployment <= NATURAL_U + 1.5);
-  }
+  let html = "";
+  STAT_DEFS.forEach(d => {
+    const v = g[d.key]; const st = d.status(v);
+    const valTxt = d.pct ? Math.round(v) : d.fmt(v);
+    html += '<div class="stat"><div class="label"><span>' + d.label + '</span><span class="chip ' + st.cls + '">' + st.t + '</span></div>'
+          + '<div class="value">' + valTxt + '</div><div class="sub">' + d.sub + '</div>';
+    if (d.pct) html += '<div class="bar"><div style="width:' + clamp(v,0,100) + '%;background:' + barColor[st.cls] + '"></div></div>';
+    html += '</div>';
+  });
+  document.getElementById("stats").innerHTML = html;
 }
 
-function setStat(key, value, status) {
-  document.getElementById("val-" + key).textContent = value.toFixed(1) + "%";
-  const chip = document.getElementById("chip-" + key);
-  chip.textContent = status.label;
-  chip.className = "chip " + status.cls;
-}
-
-function inflStatus(v) {
-  const d = Math.abs(v - TARGET);
-  if (d <= 1.0) return { cls: "good", label: "on target" };
-  if (d <= 2.5) return { cls: "warn", label: v > TARGET ? "running hot" : "too cold" };
-  return { cls: "bad", label: v > TARGET ? "out of control" : "deflation" };
-}
-function unempStatus(v) {
-  if (v <= 5.5) return { cls: "good", label: "healthy" };
-  if (v <= 8.0) return { cls: "warn", label: "elevated" };
-  return { cls: "bad", label: "recession" };
-}
-
-function flashStat(key, good) {
-  const el = document.getElementById("stat-" + key);
-  el.classList.remove("flash-good", "flash-bad");
-  void el.offsetWidth;
-  el.classList.add(good ? "flash-good" : "flash-bad");
-}
-
-function showFeedback(stars, pts, headline) {
-  const filled = "★".repeat(stars);
-  const empty = '<span style="color:#3a4660">' + "★".repeat(3 - stars) + "</span>";
+function showFeedback(res) {
+  const g = G;
+  const filled = "★".repeat(res.stars) + '<span style="color:#3a4660">' + "★".repeat(3 - res.stars) + "</span>";
   const msgs = ["Markets in turmoil!", "Rough quarter.", "Steady hand.", "Textbook policy!"];
-  let html = '<span class="stars">' + filled + empty + "</span> &nbsp; "
-           + '<b class="pts">+' + pts + " pts</b> &nbsp;·&nbsp; " + msgs[stars];
-  if (headline) html += '<br><span style="color:var(--warn)">' + headline + "</span>";
+  let html = '<span class="stars">' + filled + '</span> &nbsp; <b class="pts">+' + res.pts + ' pts</b> &nbsp;·&nbsp; ' + msgs[res.stars];
+  if (g.lastEventOutcome) html += '<br><span style="color:var(--warn)">' + g.lastEventOutcome + '</span>';
   document.getElementById("feedback").innerHTML = html;
 }
 
-/* ---- end of term ---- */
-function endGame(reason) {
+/* ---------- QUARTER FLOW ---------- */
+function beginAdvance() {
+  if (!G || !G.alive) return;
+  if (G.pendingEvent) { showEvent(G.pendingEvent); return; } // re-open if one is waiting
+  const ev = EVENTS[Math.floor(Math.random() * EVENTS.length)];
+  G.pendingEvent = ev;
+  showEvent(ev);
+}
+
+function showEvent(ev) {
+  document.getElementById("evTag").textContent = ev.icon + " Economic Event";
+  document.getElementById("evTitle").textContent = ev.title;
+  document.getElementById("evText").textContent = ev.text;
+  const box = document.getElementById("evChoices");
+  box.innerHTML = "";
+  ev.choices.forEach(ch => {
+    const btn = document.createElement("button");
+    btn.className = "choice";
+    btn.innerHTML = "<b>" + ch.b + "</b><small>" + ch.s + "</small>";
+    btn.addEventListener("click", () => { hide("eventOverlay"); resolveQuarter(ch); });
+    box.appendChild(btn);
+  });
+  show("eventOverlay");
+}
+
+function resolveQuarter(choice) {
+  const g = G;
+  g.lastEventOutcome = "";
+  if (choice) {
+    if (choice.d) applyDeltas(g, choice.d);
+    if (choice.fn) g.lastEventOutcome = choice.fn(g) || "";
+    clampStats(g);
+    g.eventsResolved++;
+    g.lastEventOutcome = (g.pendingEvent ? g.pendingEvent.title + " — you chose: " + choice.b + ". " : "") + g.lastEventOutcome;
+  }
+  g.pendingEvent = null;
+
+  simulateStep();
+  g.round++;
+  g.pressUsed = false;
+
+  const res = scoreQuarter();
+  checkAchievements();
+  g.prevRate = g.rate;
+
+  render();
+  showFeedback(res);
+
+  if (g.inflation >= 15 || g.marketConfidence <= 0 || g.financialStability <= 0 || g.round >= g.cfg.rounds) endGame();
+}
+
+/* ---------- ENDING ---------- */
+function endGame() {
   G.alive = false;
   const g = G;
-  const maxScore = g.cfg.rounds * 100;
-  const pct = g.score / maxScore; // 0..1
+  const ending = decideEnding();
+  document.getElementById("endTitle").textContent = ending.title;
+  document.getElementById("endTitle").style.color = ending.color;
+  document.getElementById("endScore").textContent = g.score.toLocaleString() + " pts";
+  document.getElementById("endVerdict").textContent = ending.verdict;
 
-  let grade, color;
-  if (pct >= 0.9)      { grade = "S"; color = "var(--good)"; }
-  else if (pct >= 0.8) { grade = "A"; color = "var(--good)"; }
-  else if (pct >= 0.65){ grade = "B"; color = "var(--accent-2)"; }
-  else if (pct >= 0.5) { grade = "C"; color = "var(--warn)"; }
-  else if (pct >= 0.35){ grade = "D"; color = "var(--warn)"; }
-  else                 { grade = "F"; color = "var(--bad)"; }
+  const bar = (label, v, color) => '<div class="bar-wrap"><div class="lab"><span>' + label + '</span><span>' + Math.round(v) + '</span></div><div class="bar2"><div style="width:' + clamp(v,0,100) + '%;background:' + color + '"></div></div></div>';
+  document.getElementById("endBars").innerHTML =
+    bar("Credibility", g.credibility, "#4dd6a3") + bar("Public Trust", g.publicTrust, "#5b9bff") +
+    bar("Market Confidence", g.marketConfidence, "#ffcf5c") + bar("Financial Stability", g.financialStability, "#ff9b6b");
+  const n = Object.keys(g.achievements).length;
+  document.getElementById("endExtra").textContent = "Final inflation " + g.inflation.toFixed(1) + "% · unemployment " + g.unemployment.toFixed(1) + "% · achievements " + n + "/" + ACHIEVEMENTS.length;
 
-  let title, verdict;
-  if (reason === "hyperinflation") {
-    title = "🔥 Hyperinflation!";
-    verdict = "Prices spiralled out of control and the currency collapsed. Your term ended early after " + g.round + " quarters.";
-    grade = "F"; color = "var(--bad)";
-  } else if (reason === "depression") {
-    title = "📉 Economic Depression!";
-    verdict = "Unemployment soared and the economy seized up. You were forced out after " + g.round + " quarters.";
-    grade = "F"; color = "var(--bad)";
-  } else {
-    title = "🎓 Full term complete!";
-    if (pct >= 0.8)      verdict = "A masterful tenure. Inflation anchored, jobs protected — your name goes in the textbooks.";
-    else if (pct >= 0.5) verdict = "A credible term. You weathered the shocks and leave the economy in decent shape.";
-    else                 verdict = "A bumpy ride with plenty of missed targets. History will remember the swings.";
+  hide("officeOverlay"); officeOpen = false;
+  show("endOverlay");
+}
+
+/* ---------- ACHIEVEMENT TOAST ---------- */
+function toast(th, tt) {
+  const wrap = document.getElementById("toastWrap");
+  const el = document.createElement("div");
+  el.className = "toast";
+  el.innerHTML = '<div class="th">🏆 ' + th + '</div><div class="tt">' + tt + '</div>';
+  wrap.appendChild(el);
+  setTimeout(() => el.remove(), 4600);
+}
+
+/* ============================================================
+   7. THREE.JS 3D CITY (simple cubes, plane, lights, labels)
+   ============================================================ */
+let three = { ok: false };
+const cityDefs = [
+  { key: "centralBank", name: "Central Bank", x: 0,  z: -4, w: 2.4, h: 4.2, d: 2.4, base: 0x4a5578 },
+  { key: "factories",   name: "Factories",    x: -6, z: -1, w: 2.6, h: 2.6, d: 2.6, base: 0x6b7280 },
+  { key: "shops",       name: "Shops",        x: 6,  z: -1, w: 2.4, h: 2.2, d: 2.4, base: 0x7d8aa0 },
+  { key: "households",  name: "Households",   x: -6, z: 5,  w: 2.4, h: 2.0, d: 2.4, base: 0x9aa6bd },
+  { key: "banks",       name: "Banks",        x: 6,  z: 5,  w: 2.4, h: 3.2, d: 2.4, base: 0x6f8a7d },
+  { key: "stockMarket", name: "Stock Market", x: 0,  z: 6,  w: 2.6, h: 3.0, d: 2.6, base: 0x4a6fae },
+];
+
+function initCity() {
+  if (window.__noThree || typeof THREE === "undefined") return false;
+  try {
+    const container = document.getElementById("city");
+    const W = container.clientWidth || 600, H = 320;
+    three.scene = new THREE.Scene();
+    three.scene.background = new THREE.Color(0x0a0e16);
+    three.camera = new THREE.PerspectiveCamera(50, W / H, 0.1, 1000);
+    three.renderer = new THREE.WebGLRenderer({ antialias: true });
+    three.renderer.setSize(W, H);
+    three.renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+    container.appendChild(three.renderer.domElement);
+
+    three.scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+    const dir = new THREE.DirectionalLight(0xffffff, 0.85);
+    dir.position.set(8, 14, 8);
+    three.scene.add(dir);
+
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(44, 44), new THREE.MeshStandardMaterial({ color: 0x111826 }));
+    ground.rotation.x = -Math.PI / 2;
+    three.scene.add(ground);
+
+    three.buildings = [];
+    cityDefs.forEach(def => {
+      const mesh = new THREE.Mesh(
+        new THREE.BoxGeometry(def.w, def.h, def.d),
+        new THREE.MeshStandardMaterial({ color: def.base })
+      );
+      mesh.position.set(def.x, def.h / 2, def.z);
+      three.scene.add(mesh);
+      const label = makeLabel(def.name);
+      label.position.set(def.x, def.h + 1.1, def.z);
+      three.scene.add(label);
+      three.buildings.push({ key: def.key, name: def.name, mesh: mesh, base: new THREE.Color(def.base), x: def.x, z: def.z, h: def.h });
+    });
+
+    three.RED = new THREE.Color(0xff4b4b);
+    three.DARK = new THREE.Color(0x141a24);
+    three.GREENBLUE = new THREE.Color(0x2bd6a0);
+    three.raycaster = new THREE.Raycaster();
+    three.mouse = new THREE.Vector2();
+    three.renderer.domElement.addEventListener("click", onCityClick);
+    window.addEventListener("resize", resizeCity);
+
+    three.ok = true;
+    three.t0 = (window.performance && performance.now) ? performance.now() : 0;
+    animateCity();
+    return true;
+  } catch (e) {
+    return false;
   }
-
-  document.getElementById("overTitle").textContent = title;
-  const gradeEl = document.getElementById("overGrade");
-  gradeEl.textContent = grade; gradeEl.style.color = color;
-  document.getElementById("overScore").textContent = g.score.toLocaleString() + " pts";
-  document.getElementById("overVerdict").textContent = verdict;
-  document.getElementById("overOverlay").classList.remove("hidden");
 }
 
-/* ---- helpers & wiring ---- */
-function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
-function rand(mag) { return (Math.random() * 2 - 1) * mag; }
-
-function showScreen(id) {
-  document.querySelectorAll(".screen").forEach(s => s.classList.toggle("active", s.id === id));
+function makeLabel(text) {
+  const c = document.createElement("canvas"); c.width = 256; c.height = 64;
+  const ctx = c.getContext("2d");
+  ctx.fillStyle = "rgba(12,16,24,0.85)";
+  ctx.fillRect(0, 0, 256, 64);
+  ctx.font = "bold 30px sans-serif"; ctx.fillStyle = "#e7edf7";
+  ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  ctx.fillText(text, 128, 33);
+  const tex = new THREE.CanvasTexture(c);
+  const spr = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true }));
+  spr.scale.set(3.4, 0.85, 1);
+  return spr;
 }
 
-document.getElementById("rate").addEventListener("input", e => {
-  document.getElementById("rateVal").textContent = parseFloat(e.target.value).toFixed(2);
-});
-document.querySelectorAll(".diff-card").forEach(b =>
-  b.addEventListener("click", () => startGame(b.getAttribute("data-diff")))
-);
-document.getElementById("advanceBtn").addEventListener("click", advance);
-document.getElementById("homeBtn").addEventListener("click", () => { G = null; showScreen("home"); });
-document.getElementById("playAgainBtn").addEventListener("click", () => {
-  document.getElementById("overOverlay").classList.add("hidden");
-  showScreen("home");
-});
+function resizeCity() {
+  if (!three.ok) return;
+  const container = document.getElementById("city");
+  const W = container.clientWidth || 600, H = 320;
+  three.camera.aspect = W / H; three.camera.updateProjectionMatrix();
+  three.renderer.setSize(W, H);
+}
+
+function animateCity() {
+  if (!three.ok) return;
+  requestAnimationFrame(animateCity);
+  const t = (((window.performance && performance.now) ? performance.now() : 0) - three.t0) / 1000;
+
+  // slow camera orbit for a bit of life
+  const a = t * 0.12;
+  three.camera.position.set(Math.sin(a) * 16, 11, Math.cos(a) * 16);
+  three.camera.lookAt(0, 1.5, 1);
+
+  if (G) updateCityVisuals(t);
+  three.renderer.render(three.scene, three.camera);
+}
+
+function updateCityVisuals(t) {
+  three.buildings.forEach(b => {
+    const m = b.mesh, mat = m.material;
+    mat.color.copy(b.base);
+    mat.emissive.setRGB(0, 0, 0); mat.emissiveIntensity = 1;
+    m.position.set(b.x, b.h / 2, b.z); m.scale.set(1, 1, 1);
+    const pulse = 0.5 + 0.5 * Math.sin(t * 6);
+    switch (b.key) {
+      case "shops": { // high inflation -> red glow + pulse
+        const hot = clamp((G.inflation - 2) / 6, 0, 1);
+        mat.color.lerp(three.RED, hot * 0.85);
+        if (hot > 0.25) { mat.emissive.copy(three.RED); mat.emissiveIntensity = hot * (0.3 + 0.5 * pulse); const p = 1 + 0.06 * hot * Math.sin(t * 6); m.scale.set(p, p, p); }
+        break; }
+      case "factories": { // high unemployment -> dim/damaged
+        const bad = clamp((G.unemployment - 4.5) / 8, 0, 1);
+        mat.color.lerp(three.DARK, bad * 0.85);
+        break; }
+      case "households": { // low public trust -> darker
+        const sad = clamp((62 - G.publicTrust) / 62, 0, 1);
+        mat.color.lerp(three.DARK, sad * 0.8);
+        break; }
+      case "stockMarket": { // low market confidence -> warning flash
+        const fear = clamp((55 - G.marketConfidence) / 55, 0, 1);
+        if (fear > 0.2) { mat.emissive.setRGB(1, 0.7, 0.1); mat.emissiveIntensity = fear * (0.5 + 0.5 * Math.sin(t * 10)); }
+        break; }
+      case "banks": { // low financial stability -> shake + red
+        const unstable = clamp((50 - G.financialStability) / 50, 0, 1);
+        mat.color.lerp(three.RED, unstable * 0.7);
+        if (unstable > 0.2) { m.position.x = b.x + Math.sin(t * 38) * 0.13 * unstable; mat.emissive.copy(three.RED); mat.emissiveIntensity = unstable * 0.45; }
+        break; }
+      case "centralBank": { // high credibility -> green/blue glow
+        const good = clamp((G.credibility - 40) / 60, 0, 1);
+        if (good > 0) { mat.emissive.copy(three.GREENBLUE); mat.emissiveIntensity = good * (0.25 + 0.25 * (0.5 + 0.5 * Math.sin(t * 2))); mat.color.lerp(three.GREENBLUE, good * 0.3); }
+        break; }
+    }
+  });
+}
+
+function onCityClick(ev) {
+  if (!three.ok || !G) return;
+  const rect = three.renderer.domElement.getBoundingClientRect();
+  three.mouse.x = ((ev.clientX - rect.left) / rect.width) * 2 - 1;
+  three.mouse.y = -((ev.clientY - rect.top) / rect.height) * 2 + 1;
+  three.raycaster.setFromCamera(three.mouse, three.camera);
+  const hits = three.raycaster.intersectObjects(three.buildings.map(b => b.mesh));
+  if (hits.length) {
+    const b = three.buildings.find(x => x.mesh === hits[0].object);
+    document.getElementById("buildingInfo").innerHTML = "<b>" + b.name + ":</b> " + buildingStatus(b.key);
+  }
+}
+
+function buildingStatus(key) {
+  const g = G;
+  switch (key) {
+    case "centralBank": return g.credibility >= 65 ? "credibility is strong — inflation is close to target and expectations are anchored." : g.credibility >= 40 ? "credibility is shaky; markets aren't fully convinced by your policy." : "credibility has collapsed — no one believes your inflation promises.";
+    case "factories": return g.unemployment <= 5.5 ? "humming along — production is healthy and hiring." : g.unemployment <= 8 ? "slowing down as unemployment rises and orders thin out." : "idle and laying off — unemployment is high and production is stalling.";
+    case "shops": return g.inflation <= 3 ? "prices are stable; consumers are spending comfortably." : g.inflation <= 5 ? "prices are climbing and shoppers are starting to feel the pinch." : "inflation is hurting consumers badly — shelves repriced almost daily.";
+    case "households": return g.publicTrust >= 60 ? "families feel confident about the future." : g.publicTrust >= 40 ? "households are anxious; trust in policy is wobbling." : "public trust has cratered — anger and uncertainty everywhere.";
+    case "stockMarket": return g.marketConfidence >= 60 ? "investors are upbeat; markets are calm and rising." : g.marketConfidence >= 35 ? "markets are jittery and volatile." : "panic on the trading floor — confidence has evaporated.";
+    case "banks": return g.financialStability >= 60 ? "the banking system is solid and well-capitalised." : g.financialStability >= 35 ? "banks are under strain; funding is getting tight." : "the financial system is shaking — a banking crisis looms.";
+  }
+  return "";
+}
+
+/* ============================================================
+   8. OFFICE MODE (2D canvas, WASD/arrows, 4 rooms)
+   ============================================================ */
+let officeOpen = false;
+const keys = {};
+const office = { px: 340, py: 220, size: 18, speed: 3.2, current: null };
+const ROOMS = [
+  { name: "Board Room", sub: "Set interest rate", action: "rate", color: "#1f3a5f" },
+  { name: "Research Room", sub: "View economy stats", action: "stats", color: "#1f5f48" },
+  { name: "Press Room", sub: "Hold a press conference", action: "press", color: "#5f4a1f" },
+  { name: "Crisis Room", sub: "Respond to events", action: "crisis", color: "#5f1f2f" },
+];
+function roomRects() {
+  const c = document.getElementById("officeCanvas");
+  const W = c.width, H = c.height, m = 16, gap = 16;
+  const rw = (W - m * 2 - gap) / 2, rh = (H - m * 2 - gap) / 2;
+  return [
+    { ...ROOMS[0], x: m, y: m, w: rw, h: rh },
+    { ...ROOMS[1], x: m + rw + gap, y: m, w: rw, h: rh },
+    { ...ROOMS[2], x: m, y: m + rh + gap, w: rw, h: rh },
+    { ...ROOMS[3], x: m + rw + gap, y: m + rh + gap, w: rw, h: rh },
+  ];
+}
+function enterOffice() {
+  if (!G || !G.alive) return;
+  officeOpen = true;
+  show("officeOverlay");
+  officeLoop();
+}
+function exitOffice() { officeOpen = false; hide("officeOverlay"); }
+
+function officeLoop() {
+  if (!officeOpen) return;
+  requestAnimationFrame(officeLoop);
+  const c = document.getElementById("officeCanvas"), ctx = c.getContext("2d");
+  const W = c.width, H = c.height;
+
+  // movement
+  let dx = 0, dy = 0;
+  if (keys["a"] || keys["arrowleft"]) dx -= 1;
+  if (keys["d"] || keys["arrowright"]) dx += 1;
+  if (keys["w"] || keys["arrowup"]) dy -= 1;
+  if (keys["s"] || keys["arrowdown"]) dy += 1;
+  office.px = clamp(office.px + dx * office.speed, office.size, W - office.size);
+  office.py = clamp(office.py + dy * office.speed, office.size, H - office.size);
+
+  // which room is the player in?
+  const rects = roomRects();
+  office.current = null;
+  rects.forEach(r => { if (office.px > r.x && office.px < r.x + r.w && office.py > r.y && office.py < r.y + r.h) office.current = r; });
+
+  // draw
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = "#0a0e16"; ctx.fillRect(0, 0, W, H);
+  rects.forEach(r => {
+    const here = office.current && office.current.action === r.action;
+    ctx.fillStyle = r.color; ctx.globalAlpha = here ? 0.55 : 0.32; ctx.fillRect(r.x, r.y, r.w, r.h);
+    ctx.globalAlpha = 1;
+    ctx.strokeStyle = here ? "#5b9bff" : "#2a3650"; ctx.lineWidth = here ? 3 : 1.5; ctx.strokeRect(r.x, r.y, r.w, r.h);
+    ctx.fillStyle = "#e7edf7"; ctx.font = "bold 17px sans-serif"; ctx.textAlign = "center";
+    ctx.fillText(r.name, r.x + r.w / 2, r.y + r.h / 2 - 6);
+    ctx.fillStyle = "#8b9bb4"; ctx.font = "12px sans-serif";
+    ctx.fillText(r.sub, r.x + r.w / 2, r.y + r.h / 2 + 14);
+    if (here) { ctx.fillStyle = "#ffcf5c"; ctx.font = "bold 12px sans-serif"; ctx.fillText("▸ press E", r.x + r.w / 2, r.y + r.h / 2 + 34); }
+  });
+  // player
+  ctx.fillStyle = "#4dd6a3";
+  ctx.beginPath(); ctx.arc(office.px, office.py, office.size, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = "#08111f"; ctx.font = "bold 13px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  ctx.fillText("🏦", office.px, office.py + 1);
+  ctx.textBaseline = "alphabetic";
+}
+
+function openRoom(action) {
+  const title = document.getElementById("roomTitle");
+  const body = document.getElementById("roomBody");
+  if (action === "rate") {
+    title.textContent = "🪑 Board Room — Interest Rate";
+    body.innerHTML = '<p>Set the policy rate for this quarter.</p><div class="control"><div class="row"><span class="name">Policy Rate</span><span class="val"><span class="rateDisplay">' + G.rate.toFixed(2) + '</span>%</span></div><input type="range" class="rateInput" min="0" max="12" step="0.25" value="' + G.rate + '" oninput="setRate(this.value)"><div class="hint">This is the same control as on your dashboard.</div></div>';
+    show("roomOverlay");
+  } else if (action === "stats") {
+    title.textContent = "📊 Research Room — Economy";
+    let h = '<div class="modal-stats">';
+    STAT_DEFS.forEach(d => { const v = G[d.key]; h += '<div class="ms">' + d.label + ' <b>' + (d.pct ? Math.round(v) : d.fmt(v)) + '</b></div>'; });
+    h += '</div>';
+    body.innerHTML = h;
+    show("roomOverlay");
+  } else if (action === "press") {
+    title.textContent = "🎤 Press Room";
+    if (G.pressUsed) {
+      body.innerHTML = "<p>You've already held a press conference this quarter. Advance a quarter before the next one.</p>";
+    } else {
+      G.pressUsed = true;
+      G.publicTrust = clamp(G.publicTrust + 6, 0, 100);
+      G.marketConfidence = clamp(G.marketConfidence + 2, 0, 100);
+      G.credibility = clamp(G.credibility - 1, 0, 100);
+      checkAchievements(); render();
+      body.innerHTML = '<p>You hold a calm, clear press conference. <b style="color:var(--good)">Public trust +6</b>, market confidence +2 — but leaning on talk too often costs a little credibility (−1).</p>';
+    }
+    show("roomOverlay");
+  } else if (action === "crisis") {
+    title.textContent = "🚨 Crisis Room";
+    if (G.pendingEvent) { hide("roomOverlay"); showEvent(G.pendingEvent); }
+    else { body.innerHTML = '<p>No active crisis right now. Hit <b>Advance Quarter</b> from your dashboard to face the next economic event.</p>'; show("roomOverlay"); }
+  }
+}
+
+/* ============================================================
+   9. WIRING
+   ============================================================ */
+function show(id) { document.getElementById(id).classList.remove("hidden"); }
+function hide(id) { document.getElementById(id).classList.add("hidden"); }
+function showScreen(id) { document.querySelectorAll(".screen").forEach(s => s.classList.toggle("active", s.id === id)); }
+
+function setRate(v) {
+  if (!G) return;
+  v = parseFloat(v); G.rate = v;
+  document.querySelectorAll(".rateInput").forEach(s => { if (parseFloat(s.value) !== v) s.value = v; });
+  document.querySelectorAll(".rateDisplay").forEach(d => d.textContent = v.toFixed(2));
+}
+
+function startGame(diff) {
+  G = newGame(diff);
+  document.getElementById("diffLabel").textContent = G.cfg.label + " · " + G.cfg.rounds + " quarters";
+  document.getElementById("termVal").textContent = "0 / " + G.cfg.rounds;
+  setRate(NEUTRAL_RATE);
+  document.getElementById("feedback").textContent = "Set your rate, then advance the quarter.";
+  document.getElementById("buildingInfo").textContent = "Click a building to inspect it.";
+  ["eventOverlay", "roomOverlay", "officeOverlay", "endOverlay"].forEach(hide);
+  showScreen("game");
+  render();
+  // init the 3D city once, after the game screen is visible (so the canvas has a size)
+  if (!three.ok) {
+    const ok = initCity();
+    if (!ok) document.getElementById("cityFallback").style.display = "flex";
+  }
+}
+
+function anyOverlayOpen() {
+  return ["eventOverlay", "roomOverlay", "endOverlay"].some(id => !document.getElementById(id).classList.contains("hidden")) || officeOpen;
+}
+
+document.querySelectorAll(".diff-card").forEach(b => b.addEventListener("click", () => startGame(b.getAttribute("data-diff"))));
+document.getElementById("advanceBtn").addEventListener("click", beginAdvance);
+document.getElementById("officeBtn").addEventListener("click", enterOffice);
+document.getElementById("officeExit").addEventListener("click", exitOffice);
+document.getElementById("quitBtn").addEventListener("click", () => { showScreen("menu"); });
+document.getElementById("playAgainBtn").addEventListener("click", () => { hide("endOverlay"); showScreen("menu"); });
+
 document.addEventListener("keydown", e => {
-  if (e.key === "Enter" && G && G.alive &&
-      document.getElementById("game").classList.contains("active") &&
-      document.getElementById("overOverlay").classList.contains("hidden")) {
-    advance();
+  const k = e.key.toLowerCase();
+  if (officeOpen) {
+    keys[k] = true;
+    if (["arrowup","arrowdown","arrowleft","arrowright"].indexOf(k) >= 0) e.preventDefault();
+    if (k === "e" && office.current) openRoom(office.current.action);
+    if (k === "escape") exitOffice();
+    return;
+  }
+  if (e.key === "Enter" && G && G.alive && document.getElementById("game").classList.contains("active") && !anyOverlayOpen()) {
+    beginAdvance();
   }
 });
+document.addEventListener("keyup", e => { keys[e.key.toLowerCase()] = false; });
 </script>
 </body>
 </html>
